@@ -1,0 +1,24 @@
+//
+// Created by Zheng  on 9/28/20.
+//
+#include "third_party/blink/renderer/platform/forensics/load_resource_event.h"
+
+namespace blink {
+
+LoadResourceEvent::LoadResourceEvent() = default;
+
+LoadResourceEvent::LoadResourceEvent(
+    std::unique_ptr<protocol::Forensics::LoadResourceEvent> event) {
+  log_event_ = std::move(event);
+}
+
+String LoadResourceEvent::Identifier() {
+  std::ostringstream str;
+  str << log_event_->getRequestUrl() << log_event_->getResourceType();
+  str << log_event_->getUseStreamOnResponse() << log_event_->getHttpOrigin();
+  //str << log_event_->getReferrerString();
+  str << log_event_->getHttpMethod();// << log_event_->getRequestHeader();
+  // remove user agent from the header
+  return String(str.str().c_str());
+}
+}

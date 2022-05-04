@@ -1,0 +1,13 @@
+<html>
+    <body>
+        <button onclick="addP('click')">addP</button>
+    <script>function addP(msg) {
+
+        var el = document.createElement('p');
+        el.innerHTML=msg; document.body.appendChild(el);
+    }
+    </script>
+    <script>addP('hello')</script>
+    <script>eval('addP("world")')</script>
+    </body>
+</html>

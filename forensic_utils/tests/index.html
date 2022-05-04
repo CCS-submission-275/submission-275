@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#563d7c">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+  </script>
+  <style>
+    .bg-recaptcha {
+      background: url("https://www.gstatic.com/recaptcha/api2/logo_48.png");
+      background-repeat: no-repeat;
+    }
+  </style>
+  <title>JSCapsule</title>
+
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Test Cases for JSCapsule</h1>
+    </header>
+    <div class="card mt-3">
+      <div class="card-header"><strong>#1: Register a Service Worker</strong>
+        <button type="button" onclick="registerSW()" class="float-right btn btn-primary">Register a Service
+          Worker</button>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>Register the Service Worker with <code>onclick="registerSW()"</code>.</li>
+          <li>Add <code>innerHTML</code> attribute the a <code>div</code> and extend its class list.</li>
+        </ul>
+        <div id="regResult" role="alert"></div>
+      </div>
+    </div>
+    <script>
+      function registerSW() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js').then(function (reg) {
+            const regResult = document.querySelector('#regResult');
+            regResult.innerHTML = 'ServiceWorker registered!';
+            regResult.classList.add('alert');
+            regResult.classList.add('alert-success');
+          })
+        }
+      }
+    </script>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#2: Enable Push Notification</strong>
+        <button id="enablePush" class="float-right btn btn-primary">Enable Push Notification</button>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>Use jQuery selector to add <code>click</code> listener.</li>
+          <li>Use jQuery <code>elem.html('text')</code> to display Notification permission.</li>
+        </ul>
+        <div id="permissionResult" role="alert"></div>
+      </div>
+    </div>
+    <script>
+      $('#enablePush').click(function () {
+        window.Notification.requestPermission().then(function (permission) {
+          if (permission === 'granted') {
+            $('#permissionResult').addClass('alert alert-success');
+            $('#permissionResult').html('Notification permission granted!')
+          } else {
+            $('#permissionResult').addClass('alert alert-danger');
+            $('#permissionResult').html('Notification permission NOT granted!')
+          }
+        })
+      })
+    </script>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#3: Create/Remove Elements</strong>
+        <button id="addElement" class="float-right btn btn-primary">Add an Element</button>
+        <button id="removeElement" class="float-right btn btn-danger mr-3">Remove an Element</button>
+      </div>
+      <div class="card-body" id="elementContainer">
+        <ul>
+          <li>Use <code>window.addEventListener</code> to handle the button click.</li>
+          <li>Create an element from an element pool <code>[div, p, button, h4]</code> using <code>Math.random()</code>.
+          </li>
+          <li>Append the element below and insert the element above.</li>
+          <li>Remove a random element other than the instruction list.</li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      function addElement() {
+        const pool = ['div', 'p', 'button', 'h4'];
+        const index1 = Math.round(Math.random() * 3);
+        const elem1 = document.createElement(pool[index1]);
+        const content1 = document.createTextNode(`I'm a ${pool[index1]} and appended below.`);
+        elem1.appendChild(content1);
+        elem1.setAttribute('style', 'opacity:0.5');
+        const index2 = Math.round(Math.random() * 3);
+        const elem2 = document.createElement(pool[index2]);
+        const content2 = document.createTextNode(`I'm a ${pool[index2]} and inserted above.`);
+        elem2.appendChild(content2);
+        document.querySelector('#elementContainer').appendChild(elem1);
+        document.querySelector('#elementContainer').insertBefore(elem2,
+          document.querySelector('#elementContainer').firstChild);
+      }
+    </script>
+    <script>
+      document.getElementById('addElement').addEventListener('click', function (e) {
+        addElement();
+      })
+
+      function removeElement(e) {
+        const list = document.querySelector('#elementContainer').children;
+        const index = Math.round(Math.random() * (list.length - 1));
+        if (list[index].tagName.toLowerCase() === 'ul') {
+          if (list.length === 1) return;
+          removeElement();
+        } else {
+          list[index].remove();
+        }
+      }
+      document.getElementById('removeElement').addEventListener('click', removeElement)
+    </script>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#4: Canvas Clock</strong>
+        <button id="startClock" class="float-right btn btn-success">Start</button>
+        <button id="stopClock" class="float-right btn btn-danger mr-3">Stop</button>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>Create a canvas.</li>
+          <li>Set a <code>setInterval</code> to draw the clock.</li>
+          <li>Request the current DateTime by <code>new Date()</code> to update the hands.</li>
+        </ul>
+        <canvas id="clock" width="400" height="400"></canvas>
+      </div>
+    </div>
+    <script src="/clock.js"></script>
+
+    <div class="card mt-3">
+      <div class="card-header" id="navigation"><strong>#5: Navigation</strong>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>Click the <a href="https://www.google.com" target='_blank'>link</a> to open a new window.</li>
+          <li>Click the <a href='#navigation'>link</a> to navigate to #5 within the document.</li>
+          <li>Click the <a href="https://www.google.com">link</a> to navigate to another page.</li>
+          <li><button onclick="openWindow()">Click to open a window</button></li>
+        </ul>
+      </div>
+      <script>
+        function openWindow() {
+          window.open('https://www.google.com')
+        }
+      </script>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header" id="navigation"><strong>#6: Image</strong>
+      </div>
+      <div class="card-body">
+        Loading png.
+      </div>
+      <img loading="lazy" class="card-img-bottom" src="/buzz.png" alt="buzz">
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header" id="navigation"><strong>#7: SVG</strong>
+      </div>
+      <div class="card-body">
+        Loading SVG.
+      </div>
+      <img class="card-img-bottom" src="https://www.gatech.edu/sites/all/themes/gt/images/gt-logo.svg" alt="buzz">
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#8: Base64 Image</strong>
+      </div>
+      <div class="card-body">
+        Loading base64 png
+      </div>
+      <img class="card-img-bottom"
+        src="data:image/png;base64,iVBORw0KGgd026wlVEHQAd4skjqzDeI1HeVfhrhH2nIgdEzhcLI5ooCxpBmSfuNkdCuVlfYsPdZSHlV05fWvLsdoK1ywdvrpEAHMtdTO+D/4zGSdwkkFA8g0U5ddxNlIVaqnCzVUOgYlO07d9Jbd5gd+zNiZmEdRrBwTA1zdCG838lc9XwdJxlMn5MUk/AdBbnCy9i0dywUeIGu8dF3qvsEJmd/m0ecxLv8JoYrH4damJJdsINF+s2cX3MNdzD4mghIddeAUiELnl7AkLgdAMoiP7hAfAUdc9jBUySjY+mEZAdVpsTteTFIEIhSQdFRqNqMbWdZxmqhyVnfKodGggBHV3ikKDrwaJiKRKDpgdq4LJg+F6VxIGovRbvpRf2C8d2BMArY0KUHUpJ3cAOgdhWdShHZQqqXxffgdRDa62TZDJcAudBtz4YdnA7bm41y0bUM0dcgluAAMCHu0dT7/lD5i63K6zjkQidMf5afIdOw/OiAU0dVEKCSIqowwlF/dclq" />
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#9: Bad Image</strong>
+      </div>
+      <div class="card-body">
+        Loading a tracking pixel as img
+      </div>
+      <img class="card-img-bottom"
+        src="https://dcf.espn.com/privacy/v1/b/1.gif?n=0&c=2750&i=5gkilk&p=prod&s=845&d=8EZ7InZlcnNpb24iOiIxLjAuMCIsImdhdGV3YXkiOiIyLjMuNDI5IiwiY2xpZW50SWQiOjI3NTAsInB1Ymxpc2hQYXRoIjoicHJvZCIsImluc3RhbmNlJwDwFCI1Z2tpbGsiLCJwYWNrZXQiOjAsIm1vZGUiOiJlbmZvcmNlVwDwDm9va2llcyI6e30sImVudmlyb25tZW50Ijoibm9uIgDyBnJlcXVlc3RzIjpbeyJkZXN0aW5hdLAA8TpodHRwczovL2RwbS5kZW1kZXgubmV0L2lkP2RfdmlzaWRfdmVyPTMuMS4yJmRfZmllbGRncm91cD1NQyZkX3J0YmQ9anNvbiZkKAAAJAD4VnZlcmlmeT0xJmRfb3JnaWQ9RUUwMjAxQUM1MTJEMkJFODBBNDkwRDRDJTQwQWRvYmVPcmcmZF9uc2lkPTAmdHM9MTYwNDcyNTc4NjA1MiIsInR5cGUiOiJ4aHIiLCJzdGFydCI6JAAQNPYAGmQUAGA4LCJzb3UgAdI6IlhIUl9NQU5BR0VSQQDAdHVzIjoiYWxsb3dlcwFgcmVhc29uHgHUXSwiZGF0YVBhdHRlchIAu2xpc3QiOltdLCJpZgA_NH0sUAG_LjY5UAEvODRQAUrANzI1Nzg2MDY5fV19" />
+    </div>
+    <div class="card mt-3">
+      <div class="card-header"><strong>#10: Style Background Image</strong>
+      </div>
+      <div class="card-body">
+        Loading background image
+        <div class="bg-recaptcha">reCaptcha</div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#11: Fetch</strong></div>
+      <div class="card-body">
+        <code>
+          fetch('/data.json').then(res => res.json()).then(data => console.log(data));
+        </code>
+        <script>
+          fetch('/data.json?type=fetch').then(res => res.json()).then(data => console.log(
+            data));
+        </script>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#11: XMLHTTPRequest</strong></div>
+      <div class="card-body">
+        <code>
+          $.ajax({
+          url: '/data.json',
+          data: data,
+          success: func,
+          dataType: dataType})
+        </code>
+        <script>
+          $.ajax({
+            url: '/data.json?type=ajax',
+            success: (data, status) => {
+              console.log(data);
+              console.log('xmlhttprequest success called')
+            },
+            error: (a, b, c) => {
+              console.log(a, b, c)
+            }
+          })
+
+          var oReq = new XMLHttpRequest();
+
+          oReq.addEventListener("progress", updateProgress);
+          oReq.addEventListener("load", transferComplete);
+          oReq.addEventListener("error", transferFailed);
+          oReq.addEventListener("abort", transferCanceled);
+          oReq.onreadystatechange = function () {
+            console.log(this.readyState)
+          };
+
+          oReq.open('GET', '/data.json?type=ajax2');
+          oReq.send();
+
+
+          // ...
+
+          // progress on transfers from the server to the client (downloads)
+          function updateProgress(oEvent) {
+            if (oEvent.lengthComputable) {
+              var percentComplete = oEvent.loaded / oEvent.total * 100;
+              // ...
+            } else {
+              // Unable to compute progress information since the total size is unknown
+            }
+          }
+
+          function transferComplete(evt) {
+            console.log("The transfer is complete.");
+          }
+
+          function transferFailed(evt) {
+            console.log("An error occurred while transferring the file.");
+          }
+
+          function transferCanceled(evt) {
+            console.log("The transfer has been canceled by the user.");
+          }
+        </script>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#12: iframe</strong></div>
+      <div class="card-body">
+        <iframe src="https://www.example.com" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header"><strong>#13: Promise</strong></div>
+      <div class="card-body">
+        <code>
+          let a = new Promise( (res, rej) => {
+          res(1);
+          });
+          a.then( val => console.log(val));
+          let b = new Promise( (res, rej) => {
+          rej("error");
+          });
+          b.catch( e => console.log(e));
+        </code>
+        <script>
+          let a = new Promise((res, rej) => {
+            res(1);
+          });
+          a.then(val => console.log(val));
+          let b = new Promise((res, rej) => {
+            rej("error");
+          });
+          b.catch(e => console.log(e));
+        </script>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    function random(k) {
+      return Math.random() * k;
+    }
+    for (let i = 0; i < 20; i++) {
+      document.write(random(2**52));
+      document.write('<br/>')
+    }
+  </script>
+  <script>
+    function hello() {
+      return eval(1 + 1);
+    }
+    console.log(hello());
+  </script>
+  <script>
+    setTimeout(() => (console.log(1)), 2000)
+  </script>
+</body>
+
+</html>

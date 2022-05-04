@@ -1,0 +1,5 @@
+**/venv/
+**/*.pyc
+logs.out
+**/node_modules/
+.idea

@@ -1,0 +1,290 @@
+# Copyright 2014 The Chromium Authors.All rights reserved.
+# Use of this source code is governed by a BSD - style license that can be
+# found in the LICENSE file.
+
+  import("//build/config/jumbo.gni")
+import("//third_party/blink/renderer/bindings/bindings.gni")
+import("//third_party/blink/renderer/core/core.gni")
+import("//third_party/inspector_protocol/inspector_protocol.gni")
+import("//v8/gni/v8.gni")
+
+_inspector_protocol_dir = "//third_party/inspector_protocol"
+
+blink_core_sources("inspector") {
+  sources = [
+    "console_message.cc",
+    "console_message.h",
+    "console_message_storage.cc",
+    "console_message_storage.h",
+    "dev_tools_emulator.cc",
+    "dev_tools_emulator.h",
+    "dev_tools_host.cc",
+    "dev_tools_host.h",
+    "devtools_agent.cc",
+    "devtools_agent.h",
+    "devtools_session.cc",
+    "devtools_session.h",
+    "dom_editor.cc",
+    "dom_editor.h",
+    "dom_patch_support.cc",
+    "dom_patch_support.h",
+    "identifiers_factory.cc",
+    "identifiers_factory.h",
+    "inspect_tools.cc",
+    "inspect_tools.h",
+    "inspected_frames.cc",
+    "inspected_frames.h",
+    "inspector_animation_agent.cc",
+    "inspector_animation_agent.h",
+    "inspector_application_cache_agent.cc",
+    "inspector_application_cache_agent.h",
+    "inspector_audits_agent.cc",
+    "inspector_audits_agent.h",
+    "inspector_base_agent.h",
+    "inspector_css_agent.cc",
+    "inspector_css_agent.h",
+    "inspector_dom_agent.cc",
+    "inspector_dom_agent.h",
+    "inspector_dom_debugger_agent.cc",
+    "inspector_dom_debugger_agent.h",
+    "inspector_dom_snapshot_agent.cc",
+    "inspector_dom_snapshot_agent.h",
+    "inspector_emulation_agent.cc",
+    "inspector_emulation_agent.h",
+    # :: Forensics ::
+    "inspector_forensics_agent.cc",
+    "inspector_forensics_agent.h",
+    "forensics/js_event.cc",
+    "forensics/js_event.h",
+    "forensics/event_recorder.h",
+    "forensics/event_recorder.cc",
+    "forensics/timer_recorder.h",
+    "forensics/timer_recorder.cc",
+    "forensics/forensic_data_store.h",
+    "forensics/forensic_data_store.cc",
+    "forensics/timer_event.cc",
+    "forensics/timer_event.h",
+    "forensics/replay_dom_timer.h",
+    "forensics/replay_dom_timer.cc",
+    "forensics/dom_node_event.cc",
+    "forensics/dom_node_event.h",
+    "forensics/dom_attr_event.h",
+    "forensics/dom_attr_event.cc",
+    "forensics/idle_callback_event.h",
+    "forensics/idle_callback_event.cc",
+    "forensics/animation_frame_event.h",
+    "forensics/animation_frame_event.cc",
+    "forensics/forensic_replay_engine.cc",
+    "forensics/forensic_replay_engine.h",
+    "forensics/forensic_recorder.h",
+    "forensics/forensic_recorder.cc",
+    "forensics/binding_recorder.h",
+    "forensics/binding_recorder.cc",
+    "forensics/dom_modification_recorder.h",
+    "forensics/dom_modification_recorder.cc",
+    "forensics/navigation_recorder.h",
+    "forensics/navigation_recorder.cc",
+    "forensics/storage_recorder.h",
+    "forensics/storage_recorder.cc",
+    "forensics/storage_event.h",
+    "forensics/storage_event.cc",
+    "forensics/storage_replayer.h",
+    "forensics/storage_replayer.cc",
+    "forensics/navigation_event.h",
+    "forensics/navigation_event.cc",
+    "forensics/replay_frame.h",
+    "forensics/replay_frame.cc",
+    "forensics/event_replayer.h",
+    "forensics/event_replayer.cc",
+    "forensics/getter_event.h",
+    "forensics/getter_event.cc",
+    "forensics/performance_event.h",
+    "forensics/replay_xml_http_request.h",
+    "forensics/replay_xml_http_request.cc",
+    "forensics/script_execution_event.h",
+    "forensics/script_execution_event.cc",
+    "forensics/js_replayer.cc",
+    "forensics/js_replayer.h",
+    "forensics/v8_recorder.cc",
+    "forensics/v8_recorder.h",
+    "forensics/crypto_random_event.cc",
+    "forensics/crypto_random_event.h",
+    "forensics/forensic_event.cc",
+    "forensics/forensic_event.h",
+    # Forensics
+    "inspector_frontend_client.h",
+    "inspector_highlight.cc",
+    "inspector_highlight.h",
+    "inspector_history.cc",
+    "inspector_history.h",
+    "inspector_io_agent.cc",
+    "inspector_io_agent.h",
+    "inspector_issue.cc",
+    "inspector_issue.h",
+    "inspector_issue_storage.cc",
+    "inspector_issue_storage.h",
+    "inspector_layer_tree_agent.cc",
+    "inspector_layer_tree_agent.h",
+    "inspector_log_agent.cc",
+    "inspector_log_agent.h",
+    "inspector_media_agent.cc",
+    "inspector_media_agent.h",
+    "inspector_media_context_impl.cc",
+    "inspector_media_context_impl.h",
+    "inspector_memory_agent.cc",
+    "inspector_memory_agent.h",
+    "inspector_network_agent.cc",
+    "inspector_network_agent.h",
+    "inspector_overlay_agent.cc",
+    "inspector_overlay_agent.h",
+    "inspector_overlay_host.cc",
+    "inspector_overlay_host.h",
+    "inspector_page_agent.cc",
+    "inspector_page_agent.h",
+    "inspector_performance_agent.cc",
+    "inspector_performance_agent.h",
+    "inspector_resource_container.cc",
+    "inspector_resource_container.h",
+    "inspector_resource_content_loader.cc",
+    "inspector_resource_content_loader.h",
+    "inspector_session_state.cc",
+    "inspector_session_state.h",
+    "inspector_style_sheet.cc",
+    "inspector_style_sheet.h",
+    "inspector_task_runner.cc",
+    "inspector_task_runner.h",
+    "inspector_trace_events.cc",
+    "inspector_trace_events.h",
+    "legacy_dom_snapshot_agent.cc",
+    "legacy_dom_snapshot_agent.h",
+    "locale_controller.cc",
+    "locale_controller.h",
+    "main_thread_debugger.cc",
+    "main_thread_debugger.h",
+    "network_resources_data.cc",
+    "network_resources_data.h",
+    "resolve_node.cc",
+    "resolve_node.h",
+    "thread_debugger.cc",
+    "thread_debugger.h",
+    "v8_inspector_string.cc",
+    "v8_inspector_string.h",
+    "worker_devtools_params.h",
+    "worker_inspector_controller.cc",
+    "worker_inspector_controller.h",
+    "worker_thread_debugger.cc",
+    "worker_thread_debugger.h",
+  ]
+}
+
+# inspector protocol-----------------------------------------------------------
+
+  inspector_protocol_generate("protocol_sources") {
+  inspector_protocol_dir = _inspector_protocol_dir
+  browser_protocol =
+    "//third_party/blink/public/devtools_protocol/browser_protocol.pdl"
+  out_dir = blink_core_output_dir
+
+  config_file = "inspector_protocol_config.json"
+  _imported = rebase_path(v8_inspector_js_protocol, root_build_dir)
+  config_values = ["imported.path=$_imported"]
+
+  inputs = [
+    v8_inspector_js_protocol,
+    browser_protocol,
+    "inspector_protocol_config.json",
+  ]
+
+  # These are relative to blink_core_output_dir.
+    outputs = [
+      # :: Forensics ::
+      "inspector/protocol/Forensics.cpp",
+      "inspector/protocol/Forensics.h",
+      # Forensics
+      "inspector/protocol/Accessibility.cpp",
+      "inspector/protocol/Accessibility.h",
+      "inspector/protocol/Animation.cpp",
+      "inspector/protocol/Animation.h",
+      "inspector/protocol/ApplicationCache.cpp",
+      "inspector/protocol/ApplicationCache.h",
+      "inspector/protocol/Audits.cpp",
+      "inspector/protocol/Audits.h",
+      "inspector/protocol/CacheStorage.cpp",
+      "inspector/protocol/CacheStorage.h",
+      "inspector/protocol/CSS.cpp",
+      "inspector/protocol/CSS.h",
+      "inspector/protocol/Database.cpp",
+      "inspector/protocol/Database.h",
+      "inspector/protocol/Debugger.h",
+      "inspector/protocol/DeviceOrientation.cpp",
+      "inspector/protocol/DeviceOrientation.h",
+      "inspector/protocol/DOM.cpp",
+      "inspector/protocol/DOMDebugger.cpp",
+      "inspector/protocol/DOMDebugger.h",
+      "inspector/protocol/DOM.h",
+      "inspector/protocol/DOMSnapshot.cpp",
+      "inspector/protocol/DOMSnapshot.h",
+      "inspector/protocol/DOMStorage.cpp",
+      "inspector/protocol/DOMStorage.h",
+      "inspector/protocol/Emulation.cpp",
+      "inspector/protocol/Emulation.h",
+      "inspector/protocol/Forward.h",
+      "inspector/protocol/IndexedDB.cpp",
+      "inspector/protocol/IndexedDB.h",
+      "inspector/protocol/IO.cpp",
+      "inspector/protocol/IO.h",
+      "inspector/protocol/LayerTree.cpp",
+      "inspector/protocol/LayerTree.h",
+      "inspector/protocol/Log.cpp",
+      "inspector/protocol/Log.h",
+      "inspector/protocol/Media.cpp",
+      "inspector/protocol/Media.h",
+      "inspector/protocol/Memory.cpp",
+      "inspector/protocol/Memory.h",
+      "inspector/protocol/Network.cpp",
+      "inspector/protocol/Network.h",
+      "inspector/protocol/Overlay.cpp",
+      "inspector/protocol/Overlay.h",
+      "inspector/protocol/Page.cpp",
+      "inspector/protocol/Page.h",
+      "inspector/protocol/Performance.cpp",
+      "inspector/protocol/Performance.h",
+      "inspector/protocol/Protocol.cpp",
+      "inspector/protocol/Protocol.h",
+      "inspector/protocol/Runtime.h",
+      "inspector/protocol/Security.cpp",
+      "inspector/protocol/Security.h",
+      "inspector/protocol/WebAudio.cpp",
+      "inspector/protocol/WebAudio.h",
+    ]
+
+  deps = ["//third_party/blink/public/devtools_protocol:protocol_version"]
+}
+
+# Compiles the sources generated above.
+  jumbo_source_set("generated") {
+  sources = get_target_outputs(":protocol_sources")
+
+  configs -= core_config_remove
+  configs += core_config_add + [
+    "../..:inside_blink",
+    "//third_party/blink/renderer/core:core_include_dirs",
+  ]
+
+  if (is_win) {
+    cflags = ["/wd4702"]  # Unreachable code.
+  }
+
+  deps = [
+    ":protocol_sources",
+    "//skia",
+    "//third_party/blink/renderer/bindings/core/v8:bindings_core_v8_generated",
+    "//third_party/blink/renderer/core:all_generators",
+    "//third_party/blink/renderer/core/probe:generated",
+    "//third_party/blink/renderer/platform:make_platform_generated",
+    "//third_party/blink/renderer/platform/wtf",
+    "//v8",
+  ]
+
+  public_deps = ["//third_party/inspector_protocol:crdtp"]
+}
