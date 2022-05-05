@@ -52,7 +52,7 @@ We don't keep the git history of Chromium in this branch, so we need a procedure
 work with this branch, AKA, the working branch.
 1. Fetch the Chromium code by following the [instruction](https://www.chromium.org/developers/how-tos/get-the-code).
 2. Checkout to the correct version by `git checkout tags/83.0.4103.97` and run `gclient sync -D` afterwards.
-3. Then add one more remote to Chromium's repo by `git remote add github git@github.com:jallen89/JSCapsule.git`.
+3. Then add one more remote to Chromium's repo by `git remote add github git@github.com:CCS-submission-275/submission-275.git`.
 4. Do a `git fetch github dev` to get the information of the added repo.
 5. Now you can checkout to the `dev` branch by doing `git checkout -b dev github/dev`.
 6. When you need to pull/push changes, remember to do `git pull/push dev github/dev`.
