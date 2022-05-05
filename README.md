@@ -1,3 +1,9 @@
+# CCS Reviewers
+
+1. The location of the major components of the record and replay engine: `third_party/blink/renderer/core/inspector/forensics`
+2. The location of the networking record and replay components: `third_party/blink/renderer/platform/forensics`
+3. Directions on how to setup are below.
+
 # ![Logo](chrome/app/theme/chromium/product_logo_64.png) Chromium
 
 Chromium is an open-source browser project that aims to build a safer, faster,
